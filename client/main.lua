@@ -1,71 +1,71 @@
 local globalOptionsCache, soundInfo, isPlayerCloseToMusic, disableMusic, config = {}, {}, false, false, require("config")
-local function getLink(name_)
+function getLink(name_)
     return soundInfo[name_].url
 end
-local function getPosition(name_)
+function getPosition(name_)
     return soundInfo[name_].position
 end
-local function isLooped(name_)
+function isLooped(name_)
     return soundInfo[name_].loop
 end
-local function getInfo(name_)
+function getInfo(name_)
     return soundInfo[name_]
 end
-local function soundExists(name_)
+function soundExists(name_)
     if soundInfo[name_] == nil then
         return false
     end
     return true
 end
-local function isPlaying(name_)
+function isPlaying(name_)
     return soundInfo[name_].playing
 end
-local function isPaused(name_)
+function isPaused(name_)
     return soundInfo[name_].paused
 end
-local function getDistance(name_)
+function getDistance(name_)
     return soundInfo[name_].distance
 end
-local function getVolume(name_)
+function getVolume(name_)
     return soundInfo[name_].volume
 end
-local function isDynamic(name_)
+function isDynamic(name_)
     return soundInfo[name_].isDynamic
 end
-local function getTimeStamp(name_)
+function getTimeStamp(name_)
     return soundInfo[name_].timeStamp or -1
 end
-local function getMaxDuration(name_)
+function getMaxDuration(name_)
     return soundInfo[name_].maxDuration or -1
 end
-local function isPlayerInStreamerMode()
+function isPlayerInStreamerMode()
     return disableMusic
 end
-local function getAllAudioInfo()
+function getAllAudioInfo()
     return soundInfo
 end
-local function isPlayerCloseToAnySound()
+function isPlayerCloseToAnySound()
     return isPlayerCloseToMusic
 end
-local function onPlayStart(name, delegate)
+function onPlayStart(name, delegate)
     globalOptionsCache[name].onPlayStart = delegate
 end
-local function onPlayEnd(name, delegate)
+function onPlayEnd(name, delegate)
     globalOptionsCache[name].onPlayEnd = delegate
 end
-local function onLoading(name, delegate)
+function onLoading(name, delegate)
     globalOptionsCache[name].onLoading = delegate
 end
-local function onPlayPause(name, delegate)
+function onPlayPause(name, delegate)
     globalOptionsCache[name].onPlayPause = delegate
 end
-local function onPlayResume(name, delegate)
+function onPlayResume(name, delegate)
     globalOptionsCache[name].onPlayResume = delegate
 end
-local function onPlayStartSilent(name, delegate)
+function onPlayStartSilent(name, delegate)
     globalOptionsCache[name].onPlayStartSilent = delegate
 end
-local function Distance(name_, distance_)
+function Distance(name_, distance_)
     SendNUIMessage({
         status = "distance",
         name = name_,
@@ -73,7 +73,7 @@ local function Distance(name_, distance_)
     })
     soundInfo[name_].distance = distance_
 end
-local function Position(name_, pos)
+function Position(name_, pos)
     SendNUIMessage({
         status = "soundPosition",
         name = name_,
@@ -84,7 +84,7 @@ local function Position(name_, pos)
     soundInfo[name_].position = pos
     soundInfo[name_].id = name_
 end
-local function Destroy(name_)
+function Destroy(name_)
     SendNUIMessage({
         status = "delete",
         name = name_
@@ -95,13 +95,13 @@ local function Destroy(name_)
     end
     globalOptionsCache[name_] = nil
 end
-local function DestroySilent(name)
+function DestroySilent(name)
     SendNUIMessage({
         status = "delete",
         name = name
     })
 end
-local function Resume(name_)
+function Resume(name_)
     SendNUIMessage({
         status = "resume",
         name = name_
@@ -112,7 +112,7 @@ local function Resume(name_)
         globalOptionsCache[name_].onPlayResume(getInfo(name_))
     end
 end
-local function Pause(name_)
+function Pause(name_)
     SendNUIMessage({
         status = "pause",
         name = name_
@@ -123,7 +123,7 @@ local function Pause(name_)
         globalOptionsCache[name_].onPlayPause(getInfo(name_))
     end
 end
-local function setVolume(name_, vol)
+function setVolume(name_, vol)
     SendNUIMessage({
         status = "volume",
         volume = vol,
@@ -131,7 +131,7 @@ local function setVolume(name_, vol)
     })
     soundInfo[name_].volume = vol
 end
-local function setVolumeMax(name_, vol)
+function setVolumeMax(name_, vol)
     SendNUIMessage({
         status = "max_volume",
         volume = vol,
@@ -139,7 +139,7 @@ local function setVolumeMax(name_, vol)
     })
     soundInfo[name_].volume = vol
 end
-local function setTimeStamp(name_, timestamp)
+function setTimeStamp(name_, timestamp)
     getInfo(name_).timeStamp = timestamp
     SendNUIMessage({
         name = name_,
@@ -147,10 +147,10 @@ local function setTimeStamp(name_, timestamp)
         timestamp = timestamp,
     })
 end
-local function destroyOnFinish(id, bool)
+function destroyOnFinish(id, bool)
     soundInfo[id].destroyOnFinish = bool
 end
-local function setSoundLoop(name, value)
+function setSoundLoop(name, value)
     SendNUIMessage({
         status = "loop",
         name = name,
@@ -158,7 +158,7 @@ local function setSoundLoop(name, value)
     })
     soundInfo[name].loop = value
 end
-local function repeatSound(name)
+function repeatSound(name)
     if soundExists(name) then
         SendNUIMessage({
             status = "repeat",
@@ -166,7 +166,7 @@ local function repeatSound(name)
         })
     end
 end
-local function setSoundDynamic(name, bool)
+function setSoundDynamic(name, bool)
     if soundExists(name) then
         soundInfo[name].isDynamic = bool
         SendNUIMessage({
@@ -176,7 +176,7 @@ local function setSoundDynamic(name, bool)
         })
     end
 end
-local function setSoundURL(name, url)
+function setSoundURL(name, url)
     if soundExists(name) then
         soundInfo[name].url = url
         SendNUIMessage({
@@ -188,7 +188,7 @@ local function setSoundURL(name, url)
 end
 
 
-local function getDefaultInfo()
+function getDefaultInfo()
     return {
         volume = 1.0,
         url = "",
@@ -205,9 +205,9 @@ local function getDefaultInfo()
     }
 end
 
-local function UpdatePlayerPositionInNUI()
-    local ped = PlayerPedId()
-    local pos = GetEntityCoords(ped)
+function UpdatePlayerPositionInNUI()
+    Wait(2000)
+    local pos = GetEntityCoords(cache.ped)
     SendNUIMessage({
         status = "position",
         x = pos.x,
@@ -216,7 +216,7 @@ local function UpdatePlayerPositionInNUI()
     })
 end
 
-local function PlayMusicFromCache(data)
+function PlayMusicFromCache(data)
     local musicCache = soundInfo[data.id]
     if musicCache then
         musicCache.SkipEvents = true
@@ -231,9 +231,8 @@ local function PlayMusicFromCache(data)
     end
 end
 
-local function CheckForCloseMusic()
-    local ped = PlayerPedId()
-    local playerPos = GetEntityCoords(ped)
+function CheckForCloseMusic()
+    local playerPos = GetEntityCoords(cache.ped)
     isPlayerCloseToMusic = false
     for k, v in pairs(soundInfo) do
         if v.position ~= nil and v.isDynamic then
@@ -244,7 +243,7 @@ local function CheckForCloseMusic()
         end
     end
 end
-local function PlayUrl(name_, url_, volume_, loop_, options)
+function PlayUrl(name_, url_, volume_, loop_, options)
     if disableMusic then return end
     if soundInfo[name_] == nil then soundInfo[name_] = getDefaultInfo() end
     soundInfo[name_].volume = volume_
@@ -274,7 +273,7 @@ local function PlayUrl(name_, url_, volume_, loop_, options)
         loop = loop_ or false,
     })
 end
-local function PlayUrlPos(name_, url_, volume_, pos, loop_, options)
+function PlayUrlPos(name_, url_, volume_, pos, loop_, options)
     if disableMusic then return end
     if soundInfo[name_] == nil then soundInfo[name_] = getDefaultInfo() end
     soundInfo[name_].volume = volume_
@@ -286,7 +285,8 @@ local function PlayUrlPos(name_, url_, volume_, pos, loop_, options)
     soundInfo[name_].isDynamic = true
     globalOptionsCache[name_] = options or { }
     CheckForCloseMusic()
-    if #(GetEntityCoords(PlayerPedId()) - pos) < 10.0 + config.distanceBeforeUpdatingPos then
+    if #(GetEntityCoords(cache.ped) - pos) < 10.0 + config.distanceBeforeUpdatingPos then
+        print("Updating")
         UpdatePlayerPositionInNUI()
         SendNUIMessage({ status = "unmuteAll" })
     end
@@ -307,7 +307,7 @@ local function PlayUrlPos(name_, url_, volume_, pos, loop_, options)
         soundInfo[name_].destroyOnFinish = true
     end
 end
-local function PlayUrlPosSilent(name_, url_, volume_, pos, loop_)
+function PlayUrlPosSilent(name_, url_, volume_, pos, loop_)
     if disableMusic then return end
     SendNUIMessage({
         status = "url",
@@ -329,12 +329,12 @@ CreateThread(function()
     local changedPosition = false
     while true do
         Wait(refresh)
-        CheckForCloseMusic()
         if not disableMusic and isPlayerCloseToMusic then
             pos = GetEntityCoords(cache.ped)
             -- we will update position only when player have moved
             if #(lastPos - pos) >= 0.1 then
                 lastPos = pos
+
                 UpdatePlayerPositionInNUI()
             end
             if changedPosition then
@@ -349,24 +349,34 @@ CreateThread(function()
                 SendNUIMessage({ status = "muteAll" })
             end
             Wait(1000)
-            local playerPos = GetEntityCoords(cache.ped)
+
+        local playerPos = GetEntityCoords(cache.ped)
             local destroyedMusicList = {}
             Wait(500)
             playerPos = GetEntityCoords(cache.ped)
-            for k, v in pairs(soundInfo) do
-                if v.position ~= nil and v.isDynamic then
-                    if #(v.position - playerPos) < (v.distance + config.distanceBeforeUpdatingPos) then
-                        if destroyedMusicList[v.id] then
-                            destroyedMusicList[v.id] = nil
-                            v.wasSilented = true
-                            PlayMusicFromCache(v)
-                        end
-                    else
-                        if not destroyedMusicList[v.id] then
-                            destroyedMusicList[v.id] = true
-                            v.wasSilented = false
-                            DestroySilent(v.id)
-                        end
+        end
+    end
+end)
+-- If player is far away from music we will just delete it.
+CreateThread(function()
+    local playerPos = GetEntityCoords(cache.ped)
+    local destroyedMusicList = {}
+    while true do
+        Wait(500)
+        playerPos = GetEntityCoords(cache.ped)
+        for k, v in pairs(soundInfo) do
+            if v.position ~= nil and v.isDynamic then
+                if #(v.position - playerPos) < (v.distance + config.distanceBeforeUpdatingPos) then
+                    if destroyedMusicList[v.id] then
+                        destroyedMusicList[v.id] = nil
+                        v.wasSilented = true
+                        PlayMusicFromCache(v)
+                    end
+                else
+                    if not destroyedMusicList[v.id] then
+                        destroyedMusicList[v.id] = true
+                        v.wasSilented = false
+                        DestroySilent(v.id)
                     end
                 end
             end
@@ -374,6 +384,12 @@ CreateThread(function()
     end
 end)
 
+CreateThread(function()
+    while true do
+        Wait(500)
+        CheckForCloseMusic()
+    end
+end)
 -- updating timeStamp
 CreateThread(function()
     Wait(1100)
@@ -547,7 +563,7 @@ end)
 
 -- Effects --
 -- For now these are the default Xsound effects. Boring and not useful.. I will add more effects later down the line
-local function volumeType(name, volume)
+function volumeType(name, volume)
     if isDynamic(name) then
         setVolumeMax(name,volume)
         setVolume(name,volume)
@@ -555,7 +571,7 @@ local function volumeType(name, volume)
         setVolume(name,volume)
     end
 end
-local function fadeIn(name, time, volume_)
+function fadeIn(name, time, volume_)
     if soundExists(name) then
         volumeType(name, 0)
         local addVolume = (volume_ / time) * 100
@@ -580,7 +596,7 @@ local function fadeIn(name, time, volume_)
         end
     end
 end
-local function fadeOut(name, time)
+function fadeOut(name, time)
     if soundExists(name) then
         local volume = getVolume(name)
         local addVolume = (volume / time) * 100
@@ -644,7 +660,7 @@ exports('setSoundURL', setSoundURL)
 exports('PlayUrl', PlayUrl)
 exports('PlayUrlPos', PlayUrlPos)
 
---local function TextToSpeech(name_, lang, text, volume_)
+--function TextToSpeech(name_, lang, text, volume_)
 --    if disableMusic then return end
 --    SendNUIMessage({
 --        status = "textSpeech",
@@ -674,7 +690,7 @@ exports('PlayUrlPos', PlayUrlPos)
 --
 --exports('TextToSpeech', TextToSpeech)
 
---local function TextToSpeechPos(name_, lang, text, volume_, pos)
+--function TextToSpeechPos(name_, lang, text, volume_, pos)
 --    if disableMusic then return end
 --    SendNUIMessage({
 --        status = "textSpeech",
